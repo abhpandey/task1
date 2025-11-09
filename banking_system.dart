@@ -1,5 +1,3 @@
-// Save as bank_system.dart and run with `dart run bank_system.dart`
-
 import 'dart:math';
 
 /// -------------------------
@@ -7,7 +5,7 @@ import 'dart:math';
 /// -------------------------
 abstract class BankAccount {
   // private fields (library-private by using underscore)
-  String _accountNumber;
+  final String _accountNumber;
   String _holderName;
   double _balance;
 
@@ -39,12 +37,13 @@ abstract class BankAccount {
 }
 
 /// Simple annotation to indicate "protected-like" method (no real enforcement)
+// ignore: unused_element
 class _Protected {
   const _Protected();
 }
-const _protected = _Protected();
 
 /// Helper annotation (no enforcement, for readability)
+// ignore: camel_case_types
 class protected {
   const protected();
 }
@@ -124,8 +123,7 @@ class SavingsAccount extends BankAccount implements InterestBearing {
 class CheckingAccount extends BankAccount {
   static const double overdraftFee = 35.0;
 
-  CheckingAccount(String accountNumber, String holderName, [double initialBalance = 0])
-      : super(accountNumber, holderName, initialBalance);
+  CheckingAccount(super.accountNumber, super.holderName, [super.initialBalance]);
 
   @override
   void deposit(double amount) {
@@ -271,7 +269,9 @@ class Bank {
   // Generate a simple report of all accounts
   void generateReport() {
     print('--- Bank Accounts Report (${_accounts.length} accounts) ---');
-    _accounts.values.forEach((acc) => acc.displayInfo());
+    for (var acc in _accounts.values) {
+      acc.displayInfo();
+    }
     print('--- End of Report ---');
   }
 
@@ -303,9 +303,9 @@ void main() {
   final bank = Bank();
 
   // Create accounts
-  final saving = bank.createSavings('Alice', 1500.0); // Savings with >= $500
-  final checking = bank.createChecking('Bob', 200.0); // Checking
-  final premium = bank.createPremium('Carol', 15000.0); // Premium with >= 10000
+  final saving = bank.createSavings('Abhishek', 1500.0); // Savings with >= $500
+  final checking = bank.createChecking('Bibek', 200.0); // Checking
+  final premium = bank.createPremium('Utsav', 15000.0); // Premium with >= 10000
 
   print('\n--- Initial report ---');
   bank.generateReport();
@@ -314,9 +314,9 @@ void main() {
   List<BankAccount> accounts = [saving, checking, premium];
 
   // Deposits
-  accounts.forEach((a) {
+  for (var a in accounts) {
     a.deposit(200.0);
-  });
+  }
 
   print('\n--- After deposits ---');
   bank.generateReport();
